@@ -15,7 +15,15 @@ class Person extends Component{
         pos:  PropTypes.shape({
             x: PropTypes.number,
             y: PropTypes.number
-        })
+        }),
+        salary(props,propty){
+            console.log(props[prperty]);
+            if(props[prperty] > 3000){
+                throw new Error('salary too big')
+            }
+            return props[propty] < 3000;
+       
+        }
     }
     // static defaultProps = {
     //     name:'zdl'
@@ -27,13 +35,13 @@ class Person extends Component{
 
     render(){
         return (<h1>
-            {this.props.name}
+            {this.props.age}
         </h1>)
     }
    
 }
 let person = {
-    name : 'person' ,
+   // name : 'person' ,
     age : 20 ,
     gender: '' ,
     hobby : ['吃饭', '睡觉'],
