@@ -14,12 +14,13 @@ class Person extends Component{
         // this.setState({num: this.state.num + 1},()=>{
         //     this.setState({num: this.state.num + 1})
         // })
+        console.log(React)
         this.setState((prevState) => ({num: prevState.num + 1}));
         this.setState((prevState) => ({num: prevState.num + 1}));
     }
     //卸载组件
     remove = () =>{
-        ReactDom.unmountCompomnentAtNode(window.root);
+        ReactDom.unmountComponentAtNode(window.root)
     }
     render(){
         return (<div>
