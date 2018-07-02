@@ -17,8 +17,8 @@ class Person extends Component{
             y: PropTypes.number
         }),
         salary(props,propty){
-            console.log(props[prperty]);
-            if(props[prperty] > 3000){
+            console.log(props[propty]);
+            if(props[propty] > 3000){
                 throw new Error('salary too big')
             }
             return props[propty] < 3000;
