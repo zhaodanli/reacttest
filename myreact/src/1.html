@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <!-- 不支持跨域,协议,主机名,端口号 表单的好处可以加自己的校验-->
+    <form  onsubmit="login(event)" id="form">
+        用户名:
+        <input type="text" name="username" required autocomplete="off">
+        <br> 密码:
+        <input type="text" name="password" autocomplete="off">
+        <br>
+        <input type="submit" value="提交" autocomplete="off">
+    </form>
+    <script>
+        let $ = document.querySelector.bind(document);
+        function serialized(ele) {
+          let arr = [];
+          let elements = ele.elements;
+          for (let i = 0; i < elements.length; i++) {
+            let { type, name, value } = elements[i];
+            switch (type) {
+              case 'text':
+              case 'password':
+                arr.push(`${name}=${value}`);
+                break
+              default:
+            }
+          }
+          return arr.join('&');
+        }
+        function login(e) {
+            //阻止默认行为
+            e.preventDefault();
+            //表单序列化 username=123&password=456
+            let qs = serialized($('#form'));
+            //ajax4步
+            let xhr = new XMLHttpRequest();
+            ajax({
+                url: '/2.html',
+                method: 'post',
+                dataType: 'json',
+                contentType:'application/www-x-form-urlencoded',
+                data: qs
+            }).then(data=>{
+                console.log(data);
+            }).catch(e=>{
+                console.log(e);
+            });
+        }
+        function ajax(options) {
+            return new Promise((resolve,reject)=>{
+                let {
+                    url = new Error('url must a string'),
+                    method = "get",
+                    dataType = "text",
+                    data = null,
+                    success,
+                    contentType,
+                    error
+                } = options;
+                let xhr = new XMLHttpRequest();
+                if (method == 'get') {
+                    xhr.open(method, `${url}?${data}`, true);//如果是get请求,要将数据拼接到url
+                } else {
+                    xhr.open(method, url, true);
+                    xhr.setRequestHeader('ContentType', contentType);//设置请求头
+                }
+                xhr.responseType = dataType;//响应类型
+                xhr.onerror = function (err) {
+                    error && error(err);
+                    reject(err)
+                }
+                xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
+                        console.log(xhr.response)
+                        success && success(xhr.response);
+                        resolve(xhr.response)
+                    }
+                }
+                }
+                data = method === 'get' ? null : data;
+                xhr.send(data);
+            })
+        }
+
+    </script>
+    <script>
+        
+    </script>
+</body>
+</html>
+

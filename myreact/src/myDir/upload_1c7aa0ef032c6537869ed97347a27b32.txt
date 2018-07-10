@@ -1,0 +1,22 @@
+
+
+
+
+
+
+
+
+1/git  强化与SVN  svn里面有许多弊端,而git解决了其很多的不足,,大型的项目都在用git
+2/更新代码,首先登录自己的github  首先将要考过来的地址运行,即进入要考的仓库,,,右上角有个fork(复制,克隆)
+3,复制到自己仓库后,把自仓库代码下载到本地https:()后面的,找到文件夹,git bash herer  
+代码clone 自己的地址
+4,remote -v查看当前本地都和那些远程仓库保持了链接
+5,增加链接  remote add (自己起名字)  仓库地址
+移除  rm 自己起的名字
+6,拉去最新信息   remote update zhufeng 
+拉取到本地  pull 珠峰 master
+7,本地拉取到暂存区  暂存区添加到历史区,,推送
+add -A
+commit -m +备注
+pull orifgin master
+push origin master.0000000000000000000
