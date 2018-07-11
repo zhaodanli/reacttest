@@ -13,8 +13,17 @@ class Person extends Component{
         hobby :  PropTypes.arrayOf(PropTypes.string),
         pos:  PropTypes.shape({x: PropTypes.number,y: PropTypes.number}),
         salary(props,propty){
+<<<<<<< HEAD
             if(props[propty] > 3000){throw new Error('salary too big')}
             return props[propty] < 3000;   
+=======
+            console.log(props[propty]);
+            if(props[propty] > 3000){
+                throw new Error('salary too big')
+            }
+            return props[propty] < 3000;
+       
+>>>>>>> 5ca25d5d5aeffff67fcb76f3efdbede0a690e420
         }
     }
     //设置默认属性

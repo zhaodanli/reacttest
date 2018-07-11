@@ -1,43 +1,45 @@
 let http = require('http');
 let url = require('url');
-let formidable = require('formidable');
-let querystring = require('querystring');
 let path = require('path');
+let fs = require('fs');
+let zlib = require('zlib');
+let mime = require('mime'); // mime可以根据路径判断当前文件是什么类型
+console.log(mime.getType('index.js'));
+// 强制缓存
+// 浏览器访问服务器 默认服务器会提供一个头 Etag
+// 浏览器下次再来的时候 会给一个头 if-none-match
 
-let server = http.createServer(function (req,res) {
-    let {pathname,query} = url.parse(req.url,true);
-    if(pathname === '/form'){
-      let method = req.method.toLowerCase(); 
-      if(method === 'get'){
-        res.end(JSON.stringify(query));
-      }else{
-        let form = new formidable.IncomingForm();
-        // err 文本 文件
-        form.uploadDir = path.join(__dirname,'./myDir');
-        form.parse(req,function (err,fileds,files) {
-          console.log(fileds);
-          console.log(files);
+let crypto = require('crypto');
+let server = http.createServer(function (req, res) {
+  let { pathname } = url.parse(req.url, true);
+  let p = path.join(__dirname, pathname);
+  fs.stat(p, function (err, stat) {
+    if (!err) {
+        let d = new Date(Date.now()+5000).toUTCString();
+        res.setHeader('Expires', d); // http1.0
+        let rs = fs.createReadStream(p);
+        let md5 = crypto.createHash('md5');
+        rs.on('data',function (data) {
+          md5.update(data);
         });
-        form.on('end', function () {
-          res.end('上传成功了')
-        });
-      }
+        // 可以用文件的大小和修改时间搭配使用
+        // 强制缓存 协商缓存 = 三种都用
+        rs.on('end',function () {
+          let value = md5.digest('hex');
+          let head = req.headers['if-none-match'];
+          if(head === value){
+            res.statusCode = 304;
+            res.end();
+          }else{
+            res.setHeader('Cache-Control', 'max-age=5') // http1.1
+            res.setHeader('Content-Type', mime.getType(p) + ';charset=utf8');
+            res.setHeader('Etag', value);
+            fs.createReadStream(p).pipe(res);
+          }
+        })
+    } else {
+      res.end();
     }
+  })
 });
 server.listen(3000);
-
-
-// let contentType = req.headers['content-type'];
-// if (contentType === 'application/x-www-form-urlencoded') {
-//   let buffers = [];
-//   req.on('data', function (data) {
-//     buffers.push(data);
-//   });
-//   req.on('end', function () {
-//     let str = Buffer.concat(buffers).toString();
-//     console.log(str);
-//     //res.end(JSON.stringify(querystring.parse(str)));
-//   })
-// } else {
-//   // 多表单的格式
-// }

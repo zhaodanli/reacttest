@@ -1,5 +1,5 @@
 import  React , {Component} from 'react';
-import ReactDom,{render} from 'react-dom'; 
+import ReactDom, {render} from 'react-dom'; 
 
 
 class Person extends Component{
@@ -20,7 +20,11 @@ class Person extends Component{
     }
     //卸载组件
     remove = () =>{
+<<<<<<< HEAD
         ReactDom.unmountComponentAtNode(window.root)
+=======
+        ReactDom.unmountComponentAtNode(window.root);
+>>>>>>> 5ca25d5d5aeffff67fcb76f3efdbede0a690e420
     }
     render(){
         return (<div>
