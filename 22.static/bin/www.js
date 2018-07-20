@@ -30,4 +30,4 @@ new Server(argv).start(); // 开启服务  argv覆盖掉config
 //   exec(`start http://${argv.hostname}:${argv.port}`);
 // }else{
 //   exec(`open http://${argv.hostname}:${argv.port}`);
-// }
+// }  

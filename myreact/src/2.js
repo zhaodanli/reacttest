@@ -1,6 +1,5 @@
 import  React from 'react'; //创建元素
 import {render} from 'react-dom'; //渲染页面dom
-
 let arr = ['不吃饭','不睡觉'];
 
 //使用map时需要增加key

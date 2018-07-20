@@ -2,12 +2,10 @@
 // 如果是目录 就将目录中的内容展现出来
 // 如果是文件就将文件展示出来
 
-// 第二个参数可以指定环境变量在为什么值时才打印
-// window set DEBUG=XXX  export DEBUG=XXXX
 
-let stat = util.promisify(fs.stat);
-let readdir = util.promisify(fs.readdir);
-let config = require('./config');
+
+
+
 let template = fs.readFileSync(path.resolve(__dirname, 'tmpl.html'), 'utf8');
 class Server {
   constructor(args) {
@@ -15,11 +13,6 @@ class Server {
     this.template = template;
   }
   async handleRequest(req, res) { // 这里的this都是实例
-    let { pathname } = url.parse(req.url, true);
-    let p = path.join(this.config.dir, pathname);
-    // 1.根据路径 如果是文件夹 显示文件夹里的内容
-    // 2.如果是文件 显示文件的内容
-    try { // 如果没错误说明文件存在
       let statObj = await stat(p);
       if (statObj.isDirectory()) {
         // 现在需要一个当前目录下的解析出的对象或者数组
@@ -37,10 +30,6 @@ class Server {
         // 文件 发送文件
         this.sendFile(req, res, p, statObj);
       }
-    } catch (e) {
-      // 文件不存在的情况
-      this.sendError(req, res, e);
-    }
   }
   // 实现其他功能
   // 实现范围请求
